@@ -1,0 +1,334 @@
+---
+title: "Intro to R & Machine Learning Modeling Process"
+author: '[Omer Farooq](https://www.linkedin.com/in/momerfarooq/)'
+date: "12/28/2020"
+output:
+  html_document:
+    df_print: paged
+    highlight: tango
+    theme: cerulean
+    toc: yes
+  pdf_document: default
+  word_document:
+    toc: yes
+---
+
+```{r setup,include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+#needed to knit properly if using Python in any of the chunks
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+```
+
+# 1. Objective {#one}
+The goal of this session is to provide an introduction to 'R' programming language for data analysis and modeling and go over the typical process/steps for data modeling. 
+
+This notebook will be a collection of resources for you to you research and self-study later on. Goal is to get you introduced to R and concepts of data modeling. *Targeted audience* of this session is the data science beginners. 
+
+# 2. Intro to R
+
+### 2.1 Introduction
+R is an open source programming language accompanied by a free software (R Studio) for statistical analysis and graphics. It is widely used among statisticians & data scientisits. R was developed at Bell Labs (formerly AT&T, now Lucent Technologies) and first appeared in Aug 1993.
+
+R has a lot of similarities to Python in use but has a reputation of being hard to learn based on this [article](http://r4stats.com/articles/why-r-is-hard-to-learn/) (I didn't find it hard to learn actually). 
+
+[Go to top](#one)
+
+### 2.2 Key Traits
+* Main R Website is [r-project.org](https://www.r-project.org/) with a lot of information & documentation.
+* Free IDE called [R-Studio](https://rstudio.com/) with typical IDE functionality like version control, writing and executing code etc. 
+* R, like python, can be written in R Script or a Notebook (called R Notebook and R Markdown). R Notebook & Markdown are technically the same with basic difference in how code is executed (one chunk vs one line).
+* R Studio offers other options of writing in other languages as well as other output types (app, html etc.).
+* Like Python, R comes with libraries (called Packages), a collection of pre-coded functions & data sets that can be installed from the official Repository called [CRAN](https://cran.r-project.org/). I found [literature](https://www.datacamp.com/community/tutorials/r-packages-guide) that there are at least 10,000 R packages out there, I am sure there are more! 
+
+[Go to top](#one)
+
+### 2.3 Pros & Cons
+No introduction is complete without a pro & con list! Let's see one for R as well.
+
+Pros | Cons
+-----|------
+Open Source | Origin in older programming language S. Weaker base package (e.g. doesn't support 3D or animation).
+Lingua franca of statistics | Memory Management - unlike python, phyical memory stores the objects. Utilizes more memory, requires entire data in memory. Thus, not ideal for big data without data management packages or integrations like hadoop.
+Amazing data wrangling support (hint: dplyr, readr) | Lacks basic security unlike python. Several restrictions prohibiting embedding into web-apps.
+10,000+ packages | Steep learning curve
+Plotting & graphing (hint: ggplot2, plotly) | Relatively slower speed than Python & Matlab.
+Highly compatible with other languages like C, C++, Java & Python | Often requires knowledge of several packages to implement algorithms.
+Platform independent (Windows, Linux, Max) | -
+Attractive reporting & packaging of content (hint: Shiny, Markdown) | -
+ML Operations | -
+
+[Go to top](#one)
+
+### 2.4 R vs Python
+The obvious question that comes to mind is 'Why R and not Python?'. Especially when Python is more prevalent (# 3 in Toibe index). Obviously, every language has it's specific use cases where it excels. A lot of times, it's just a matter of comfort (what you know better or learned first!). Good news is that most languages have enough cross-polination possible (R in Python, Python in R, Databricks allows R & Python etc.) and almost everything we typical want to do is possible in both R & Python. 
+
+Nonethless, here are some key differences b/w R & Python.
+
+![](C:\Users\OFarooq2\OneDrive - T-Mobile USA\T-Mobile\4. Misc\Knowledge Sharing\Data Science Session\RvsPython.png)
+
+* Here is a [Datacamp paper](https://s3.amazonaws.com/assets.datacamp.com/email/other/Python+vs+R.pdf) on an in-depth comparison of both languages. 
+* Key programming syntax differences b/w the two languages are shown [here](https://www.dataquest.io/blog/python-vs-r/).
+* [This](https://activewizards.com/content/blog/The_most_popular_libraries_for_data_science:_R,_Python,_Scala_[Infographic]/compare-table06.png) is a good view of top libraries in R & Python. 
+
+According to TOIBE Index (https://www.tiobe.com/tiobe-index/), R ranks 9th among all programming languages as of Dec 2010, with it's rating peaking in Aug 2020.  
+![Top 20 Software Languages](C:\Users\OFarooq2\OneDrive - T-Mobile USA\T-Mobile\4. Misc\Knowledge Sharing\Data Science Session\TOIBEIndex.png)
+[IEEE Spectrum](https://developer-tech.com/news/2020/jul/27/ieee-spectrum-python-top-programming-language-2020/) also releases a yearly popularity ranking of languages & Python has been at the top for last few years. 
+![IEEE Specturm](C:\Users\OFarooq2\OneDrive - T-Mobile USA\T-Mobile\4. Misc\Knowledge Sharing\Data Science Session\IEEERanking.png)
+
+[Go to top](#one)
+
+### 2.5 R Resources
+Here is a list of key resources to get you started in R: 
+
+* R Introduction Deck - [LINK](https://www.dropbox.com/s/kb99sbk3el84q1q/RWorkshp.pdf?dl=0)
+* Tens of different cheat sheets - [LINK](https://rstudio.com/resources/cheatsheets/)
+* R Reference Card - [LINK](https://cran.r-project.org/doc/contrib/Baggott-refcard-v2.pdf)
+* Recommended R Packages - [LINK](https://support.rstudio.com/hc/en-us/articles/201057987-Quick-list-of-useful-R-packages)
+
+[Go to top](#one)
+
+# 3. What is Machine Learning Modeling
+Discussion around ML models is incomplete without talking about algorithms. 
+
+* An **algorithm** is a set of procedures, rules or logic that is run on data to create an ML model. E.g. classification algorithms like K-Nearest Neighors, Logistic Regression, SVM, prediction algorithms like regression and clustering algorithms like K-Means. 
+* A **model** is the output of the ML algorithm. Or it can said that a model is the code implementation of the algorithm that creates the repeatable output of the algorithm.
+
+More information [here](https://machinelearningmastery.com/difference-between-algorithm-and-model-in-machine-learning/). 
+
+### 3.1 Modeling Terminology
+It is important to be familiar with some key terminology before jumping into the modeling exercise. 
+
+* **Rows** - think of a table format data, each row represent a data point in a typically multi-dimensional space. 
+* **Columns** - each column represents an attribute of the data. Also referred to as *features*, *covariates*, *predictors*. The column that contains the answer to the problems (category a row belongs to or a number we are trying to predict) is called *Response* or *Outcome*.
+* **Data Types** - there are a two main types of data with a few sub-types. 
+  + **Structured Data** - data that can be stored in a structured way. E.g. credit scores, aging, sales, Male/Female, Hair Color etc. 
+      - **Quantitative** - numbers with a meaning. E.g. age, sales, spend, inventory. Also, called *continuous* variable. 
+      - **Categorical** - numbers without meaning. E.g. zipcodes. Higher/lower is not meaningful. These numbers typically put group of data into a category/bucket.
+        - **Binary** - Subset of categorical. Can only take one of two values - Yes/No, Male/Female/ 1/0
+      - **Unrelated Data** - no relationship b/w data points. E.g. different custoemrs, different loan applicants etc. 
+      - **Time Series Data** - same data record over time. Often (not always) record at equal intervals. E.g. daily stock price, daily sales, spend over time etc. 
+  + **Unstructured Data** - data that is not easily described or stored. E.g. written text
+* **Model Fit** - how good the model represents the relationships and trends among predictor variables to calculate response variable. 
+* **Overfitting** - model is too good to be true. It's too accurate. Some predictor variables are giving away the answer. 
+* **Null Hypothesis** - A lot of statistical tests in ML check against the null hypothesis (opposite = alternate hypothesis). If the null hypothesis in a test is rejected by P-Value (by being lower than 0.05), then it means alternate hypothesis must be true. E.g. 
+  - Shapiro Test checks whether data is normal.
+  - Null hypothesis = data is normally distributed. If P-Value < 0.05, null hypothesis is rejected and alternate hypothesis that data is not normal is true & vice versa. 
+
+[Go to top](#one)
+
+# 4. Typical Steps in Building an ML Model
+
+Let's dive into the ML model process. Following are the typical steps:
+
+* A step before the ones below is data analysis & preparation. This step, by far, could take the longest. **Data analysis** helps formulate and shape up the business problem, even before we know that an ML model is needed. 
+* Once a problem is identified and we know we need to build a model, **data preparation** is the key step. It could involve a lot of SQL code or data wrangling in Python/R. It typically involves, pulling data from all relevant sources, creating multiple joins to create a clean dataset for modeling with all available features. 
+
+### 4.1 Treat Missing Values
+
+Missing values (e.g. N/A, NULLS, blanks etc.) are a problem for machine learning models. When data is not there, the algorithm can't really interpret it and could either skip that data point or use it wrongfully. Some techniques to handle missing values include:
+
+* Throw away missing data by removing the data points (aka rows) from your data set.
+* Add a categorical varible (0 = missing, /1 = not missing) indicating missing data in a row. 
+* If missing data itself is categorical, add 'missing' as a category.
+* Imputation
+  - Midrang value - mean, median, numeric, mode (categorical)
+  - Regression - predict missing feature values using other features (model before the real model).
+
+More readings on handling missing values: [link1](https://towardsdatascience.com/7-ways-to-handle-missing-values-in-machine-learning-1a6326adf79e) & [line2](https://dev.acquia.com/blog/how-to-handle-missing-data-in-machine-learning-5-techniques/09/07/2018/19651).
+
+[Go to top](#one)
+
+### 4.2 Remove Outliers
+
+Outlier is a data point that is very different from other values. Keeping them in the data might overly determine the fit of the model. Outlier coule be a **point outlier** (a data point different from rest) or **contextual outlier** (data point contextually different, but might not be far in value. E.g. out of pattern datapoint in time series). Outliers in response variable are also called **influential points**.
+
+* **Detecting Outliers**
+  - Basic statistical analysis - standard deviation, quartiles analysis etc.
+  - Visual techniques like [Box & Whikers plot](https://www.rdocumentation.org/packages/graphics/versions/3.6.2/topics/boxplot) (one dimension at a time) or [Cook's Distance](https://www.rdocumentation.org/packages/car/versions/1.2-16/topics/Cook's%20Distances) (for influential points).
+  - Grubbs Test - Grubbs test are of various types. Point to note is that Grubbs test requires data to be normal and data normality can be checked in multiple ways like [density plot](http://www.sthda.com/english/wiki/ggplot2-density-plot-quick-start-guide-r-software-and-data-visualization), [Q-Q Plot](https://www.rdocumentation.org/packages/ggpubr/versions/0.4.0/topics/ggqqplot) and [Shapiro Wilk Test](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/shapiro.test).When data is not normally distributed (has heteroscadasticity, meaning unequal vairance), it can be tranformed to normal data using [Box-CoX Tranformation](https://www.rdocumentation.org/packages/EnvStats/versions/2.4.0/topics/boxcox).
+    + *Grubbs Test type 10* - tests one outlier.
+    + *Grubbs Test type 11* - tests two outliers on both extremes. This test will only identify outliers if both data points are outliers.
+    + *Grubbs Test type 20* - tests the most extreme and the next extreme value as outliers.  
+  - Additional Outlier tests
+    + [Boxplot.stats](https://www.rdocumentation.org/packages/grDevices/versions/3.6.2/topics/boxplot.stats) - returns the data points that were outside the extremes of the whiskers.
+    + [FindOutliersZscore](https://www.rdocumentation.org/packages/climtrends/versions/1.0.6/topics/FindOutliersZscore) function from the climtrends package - returns the two highest points (same as Grubbs tests).
+    + [FindOutliersMAD](https://www.rdocumentation.org/packages/climtrends/versions/1.0.6/topics/FindOutliersMAD) function from the climTrends package - identifies outliers based on MAD and coef values (coef = 3 - very conservative, coef=2.5 - moderately conservative & coef=2 - poorly conservative)
+* **What to do with Outliers**
+  - If outlier is bad data - can be omitted or imputation can be used to replace value.
+  - If outlier is real/correct data (e.g. unexpected weather events) - omitting these poitns might make the model to optimistic. A good compromise is to build two models:
+    + One with outliers included and estimating probability of outliers happening under different conditions
+    + Second with outliers removed to estimate events occuring under normal circumstances.
+
+[Go to top](#one)
+
+### 4.3 Scale Data
+
+Scale of the data is important in model building. Why? For example, a feature of household income would be on 10^{5} scale whereas another feature credit scores in the same data set will on 10^{2} scale.Scaling the data will be necessary to ensure model prediction is accurate. There are two types of scalingg manipulations:
+
+* **Linear Scaling**
+  - More common type of scaling. Also called Normalization.
+  - Data is scaled b/w 0 and 1.
+  - For each  data point, $$x_{ij}^{scaled} =\frac{x_{i,j}-x_{min j}}{x_{max j}-x_{min j}}$$
+  
+* **Non-Linear Scaling**
+  - Called Standardization
+  - Scaling to normal distribution, meaning, mean = 0 and standard deviation = 1
+  - For factor j, if $\mu_{j}$ is the mean and $\sigma_{j}$ is the standard deviation, then for each point, $$x_{ij}^{standardized} =\frac{x_{i,j}-\mu_{j}}{\sigma_{j}}$$
+
+Linear scaling is used mostly when data is in a bounded range, for example, optimization models that need bounded data, SAT scores (200-800), RBG colors (0-255) etc. Examples to use standardization include PCA, clustering etc. Sometimes, it is not clear, trying both is a good idea! 
+
+Also, most times, scaling is baked into the model function as a parameter (Scaled = TRUE) and separate scaling will not be needed. 
+
+[Go to top](#one)
+
+### 4.4 Create Dummy Variables
+
+Many times, several of the predictors/variables are categorical with multiple categories. The models cannot use these variables as is because models are mathematical calculations, they can't use descriptive values. Dummy variables with 0/1 values are needed. For example:
+
+![source: displayr.com](C:\Users\OFarooq2\OneDrive - T-Mobile USA\T-Mobile\4. Misc\Knowledge Sharing\Data Science Session\dummy.png)
+
+Number of dummy variables could be same as number of categories in the original categorical variable or one less will suffice as well.
+
+[Go to top](#one)
+
+### 4.5 Variable Selection
+
+Two main reasons to be selective in number of variables/features/predictors used in model:
+1. Too many variables might cause overfitting.
+2. To keep the model simple.
+
+Following are some methods of variable selection. Mostly, variable selection indications are available from the output of the model (in terms of significance intervals of the features).
+
+* **Forward selection** - start with one or set of best variables and keep adding more. When to stop: when the model is good enough based on pre-specified stopping rule. P-value help determine which factors to add.
+* **Backward selection** - opposite of forward selection. Start with all factors and remove factors until there is no factor bad enough to remove. P-values are used for decisioning as well.
+* **Stepwise selection** - combines forward & backward selection.Starts with best factor(s), adds next best factor, assesses the model with current factors, removes poorly performing factor and continues the cycle until good enough model is created. Decisions are made step by step. It's a greedy algorithm (one thing at each step that looks best at that time). 
+
+![Source: Georgia Tech Intro to Modeling Course slide](C:\Users\OFarooq2\OneDrive - T-Mobile USA\T-Mobile\4. Misc\Knowledge Sharing\Data Science Session\variable.png)
+
+These selection methods are explained very well [here](https://quantifyinghealth.com/stepwise-selection/)
+
+Other more advanced optimization based techniques available as well like [Lasso](https://towardsdatascience.com/variable-selection-using-lasso-493ac2e5660d) & [Elastic Net](https://corporatefinanceinstitute.com/resources/knowledge/other/elastic-net/#:~:text=The%20elastic%20net%20method%20performs,of%20the%20elastic%20net%20technique.). 
+
+[Go to top](#one)
+
+### 4.6 Split data (Train, Validate, Test) {#two}
+
+A model's fit captures the *real* and *random* effects in a data set. A new data set will only duplicate the real effects and thus, be able to measure how well a model holds up. Thus, it's a good practice to separate the data model is trained on (training data set) from the data set a model's performance is measured on (validation data set).
+
+When we have to select between multiple feasible models, it is good practice to do training, model selection and performance estimate on different data sets.
+
+* **Training data** - to fit the model
+* **Validation data** - to choose between models
+* **Test data** - to estimate performance of chosen model
+
+![Source: Georgia Tech Intro to Modeling Course slide](C:\Users\OFarooq2\OneDrive - T-Mobile USA\T-Mobile\4. Misc\Knowledge Sharing\Data Science Session\validation.png)
+
+Other concepts in model validation:
+
+* Rule of thumb to split data: 
+  - Working with one model: 70-90% training, 10-30% test. E.g. 80-20%
+  - Comparing models: 50-70% training, remaining equally b/w validation & test). E.g. 60-20-20%
+* Selecting data for each group is a tricky topic. We want to be sure that we don't introduce more or less bias in one data than the other. Two methods here:
+  - Randomly pick data points for each set. 
+  - Rotation - take turn selecing. E.g. 5 point rotation: training, validation, training, test, training.
+* Another good solution is Cross Validation. **K-fold cross validation** means combined spliting training+validation data into 'k' number of splits and running training & validation on different combinations of those splits. Model is selected on the average of performance metrics. Selecting value of k requires analysis of it's own. More on k-fold validation [here](https://medium.com/datadriveninvestor/k-fold-cross-validation-6b8518070833).    
+
+[Go to top](#one)
+
+### 4.7 Build Models Using Training Data Set
+
+At this point, the data clean up and preparation has been done, we are ready to start building and trying different models. Different algorithms are used for different use cases. Following is a quick summary. Models fall into two main categories. 
+
+* **Supervised Learning** - response variable is known and training data is used to fit a model first. The fitted model is then used to make predictions of continuous (house price, spend amount, etc.) or categorical (Y/N) variables.
+* **Unsupervised Learning** - when response variable is not available, model cannot be trained. We need the model to learn from the data by itself. *Clustering* is the main example of this type of models. For example, customer segmentation, clustering spend into categories etc. 
+
+Here's an image that classifies models into different groups.
+
+![source: towardsdatascience.com](C:\Users\OFarooq2\OneDrive - T-Mobile USA\T-Mobile\4. Misc\Knowledge Sharing\Data Science Session\models.png)
+
+More information on different algorithms is shown in the following Azure ML Studio chart (bigger image can be downloaded from [here](https://download.microsoft.com/download/C/4/6/C4606116-522F-428A-BE04-B6D3213E9E52/ml_studio_overview_v1.1.pdf)).
+
+![source: Microsoft Azure ML Studio blogs](C:\Users\OFarooq2\OneDrive - T-Mobile USA\T-Mobile\4. Misc\Knowledge Sharing\Data Science Session\models2.png)
+
+Another thing to keep in mind is that, most models have some pre-requisite assumptions for the data. If many of those assumptions are not met, results will be biased and less accurate. Real data doesn't always meet all assumptions of models but it's good to do some tests to double check. It is good to know how accurate the model will be before even building it. 
+
+Following are couple of examples of pre-req assumptions for regression models.
+
+**Linear Regression**
+
+1. Linearity of the data - the relationship between the predictor (x) and the response (y) is assumed to be linear.
+  - Check by using Pearson correlation matrix using [cor()](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/cor) and [corplot()](https://www.rdocumentation.org/packages/corrplot/versions/0.2-0/topics/corrplot) functions. 
+2. Normality of error terms (residuals) - the residual errors are assumed to be normally distributed.
+3. Homoscedasticity, i.e. the error term has a constant variance (no heteroscedasticity).
+
+The linear regression model output in R helps check some of these assumptions automatically (more infor [here](http://www.sthda.com/english/articles/39-regression-model-diagnostics/161-linear-regression-assumptions-and-diagnostics-in-r-essentials/)). 
+
+Following are some pre-reqs for a logistic regression model. 
+
+**Logistic Regression**
+
+1. Response variable should be categorical.
+2. Predictors should be not be correlated to each other i.e. no multicollinearity (pearson correlation test can help here as well).
+3. Predictors should be independent observations (i.e. not repeated measurements or matched data).
+4. Predictors should be related linearly. Predictor & response are not required to be linear. 
+5. Requires larger sample size.
+
+[Go to top](#one)
+
+### 4.8 Selecting & Testing a Model Using Validation & Test Data Sets
+
+Once multiple models are built, next step is to select the best model. The final selected model could then be applied to net new unseen data for predictions. The process typically works like this (as explained in [section 4.6](#two)  as well):
+
+* Check various performance metrics for all models using validation data set.
+* Make a selection of the model based on those metrics. 
+* Double check the performance & quality of the chosen model on test data set using same performance metrics. 
+
+Following are some key performance statistical metrics for continuous & categorical prediction models.
+
+* **Continuous Prediction** (e.g. Regression)
+  + *R-Squared* - Estimate of how much variability the model accounts for. E.g. R-Squared = 59% means the model accounts for 59% of variability in the data, remaining 41% is randomness or other factors not used.
+    - Higher $R^{2}$ is better but typically 50-60% considered good. 
+  + *Adjusted R-Squared* - same as $R^{2}$ but adjusts for the number of attributes used. 
+    - More information on calculation of both $R^{2}$ and Adj $R^{2}$ [here](https://www.analyticsvidhya.com/blog/2020/07/difference-between-r-squared-and-adjusted-r-squared/).
+  + *The F-Statistic* - compares the fit of different linear models (one with no predictors and the model you are testing with predictors). More on it [here](https://blog.minitab.com/blog/adventures-in-statistics-2/what-is-the-f-test-of-overall-significance-in-regression-analysis).
+  + *Standard Error* - simply put, it's the difference of actual vs regression predicted value. 
+
+![Different measures & criteria](C:\Users\OFarooq2\OneDrive - T-Mobile USA\T-Mobile\4. Misc\Knowledge Sharing\Data Science Session\regression.png)
+
+* **Categorical Prediction** (e.g. classification models like SVM, KNN, logistic regression etc.)
+  + *Confusion Matrix* - with classification prediction, we will have incorrectmodel predictions (both positive & negative). A confusion matrix helps see the model's predictions & actual classes in a matrix form. Several caculations are done from this matrix to help determine the quality of the model. 
+    - Accuracy - tells us how accurate the model is predicting actual labels. 
+    - Sensitivity - also called, true positive rate, helps determine how well the model predicted true positives. 
+    - Specificity - also called, true negative rate, helps determine how well the model predicted true negatives. 
+  + *ROC & AUC Score* - Receiver Operating Characteristic Curve (ROC) is the plot of (1 - Specificity) i.e. false positive rate, on x-axis & Sensitivity, true positive rate, on y-axis. This curve tells us how well the model can distinguish b/w two things. AUC (Area under the curve) is the area under ROC curve. Higher the AUC, better the model. 
+
+![Source: GT Intro to modeling slides](C:\Users\OFarooq2\OneDrive - T-Mobile USA\T-Mobile\4. Misc\Knowledge Sharing\Data Science Session\classification.png)
+
+More information on these classification measures [here](https://towardsdatascience.com/top-10-model-evaluation-metrics-for-classification-ml-models-a0a0f1d51b9).    
+
+[Go to top](#one)
+
+# 5. Data Modeling Example
+
+Coming soon! An example was coded using confidential company data, working on recreating it with public data. 
+
+# 6. Final Takeaway
+
+* Modeling is more of an art than science. 
+  + The decisions made along the way affect the outcome of the models. 
+  + Some times a lot of trial & error is needed.
+  + There is typically no perfect model, you build something that is acceptable and move on!
+* Beware of the personal biases. Our personal biases can creep into the models we build as a result of decisions we make along the way.
+* Due to the immense amount of work needed in iterations to build good models, a lot of ML work is being automated in pre-programmed software and libraries. Hint: AutoML like H2O.ai
+  + This means the new age Data Scientist has to be better at math and under the hood stuff than being able to program it. Knowing how to interpret results and use the auto-ML the right way will be the key.
+
+Lastly, [here](http://econweb.umd.edu/~pope/crowdsourcing_paper.pdf) is a fun paper on a case study published in "Advances in Methods and Practices in Psychological Science" in 2018.
+
+* Goal was to assess: whether soccer referees are more likely to give red cards to dark-skin-toned players than to light-skin-toned players.
+* 29 teams, 61 analysts, same data set.
+* Interestingly, the results were wide ranging indicating how different teams choices led to very different outcomes for same data set and objective.
+
+[Go to top](#one)
